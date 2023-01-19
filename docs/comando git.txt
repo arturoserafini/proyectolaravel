@@ -1,0 +1,23 @@
+--instalar y configurar GIT
+
+
+ git config --global user.name "arturoserafini"
+ git config --global user.email "arturo.serafinii@gmail.com"
+
+--------------------
+si ya existe repositoria(clonar)
+>git clone direccion_git
+
+si no existe(INIT)
+>git init
+-------------------
+>git init
+>git remote add origin direccion_git
+>git remote add origin https://github.com/arturoserafini/proyectolaravel.git
+-- crear el repositorio remoto en GITHUB(direccion_git)
+-------------------------------------
+
+git add . (todos los cambios)
+git add  (el nombre del archivo)
+git commit -m "indicar el cambio"
+git push origin master
