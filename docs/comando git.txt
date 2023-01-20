@@ -18,6 +18,17 @@ si no existe(INIT)
 -------------------------------------
 
 git add . (todos los cambios)
+
 git add  (el nombre del archivo)
+git add docs/comandos git.txt
+
 git commit -m "indicar el cambio"
 git push origin master
+
+------------------------
+para crear una rama
+git branch rama1
+----------------------
+cambiar a otra rama
+git checkout rama1
+
