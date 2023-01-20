@@ -25,12 +25,15 @@ class AuthController extends Controller
 
 
         //guardar
-    $u = new User;
-    $u->name = $request->name;
-    $u->email = $request->email;
-    $u->password = $request->password;
+        $u = new User;
+        $u->name = $request->name;
+        $u->email = $request->email;
+        $u->password = bcrypt($request->password);
+        $u->save();       
 
-        //redireccionar
+        // redireccionar
+        return redirect("/");
+
     }
 
 }
