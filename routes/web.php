@@ -17,8 +17,9 @@ Route::post('/registro', [AuthController::class, "guardarUsuario"])->name("guard
 // CRUD DE USUARIO
 //solo lo que trae el resource solo para crud
 Route::resource("usuario", UserController::class);
+//lista de usuarios datatables con ajax
+Route::get('/usuarios-dt', [UserController::class, "listarUsuariosDT"])->name("listarUsuariosDT");
 
-//RUTA LOGIN
 Route::get('/login', [AuthController::class, "formLogin"])->name("login");
 Route::post('/login', [AuthController::class, "login"])->name("ingresar");
 

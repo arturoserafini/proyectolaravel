@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DataTables;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\User;
 
 class UserController extends Controller
 {
@@ -16,6 +18,21 @@ class UserController extends Controller
         //listar usuarios
            $usuarios= User::all();
         return view("admin.usuario.listar",compact('usuarios'));
+    }
+
+    public function listarUsuariosDT(Request $request)
+    {
+        if($request->ajax()){
+            $data = User::latest()->get();
+            return DataTables::of($data)
+                                ->addIndexColumn()
+                                ->addColumn('accion', function($row){
+                                    $botones = '<a href="javascript:void(0)">Editar</a><a href="javascript:void(0)">Eliminar</a>';
+                                })
+->rawColumns(['accion'])
+                                ->make(true);
+        }
+        
     }
 
     /**
