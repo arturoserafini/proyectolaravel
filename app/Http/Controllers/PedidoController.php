@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cr;
+use App\Models\Pedido;
 use Illuminate\Http\Request;
 
 class PedidoController extends Controller
@@ -14,7 +14,10 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        //
+        $pedidos = Pedido::orderBy('id', 'desc')->paginate();
+
+        return view('admin.pedido.lista', compact('pedidos'));
+
     }
 
     /**
@@ -24,7 +27,7 @@ class PedidoController extends Controller
      */
     public function create()
     {
-        //
+        return view("admin.pedido.nuevo");
     }
 
     /**
@@ -35,16 +38,39 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "cliente_id" => "required"
+        ]);
+
+        $cod_pedido = Pedido::generateInvoiceNumber();
+
+        // guarda el pedido
+        $pedido = new Pedido();
+        $pedido->cod_pedido = $cod_pedido;
+        $pedido->cliente_id = $request->cliente_id;
+        $pedido->fecha = date('Y-m-d H:i:s');
+        $pedido->estado = 1;
+        $pedido->save();
+
+        $carrito = $request->carrito;
+
+        foreach ($carrito as $prod) {
+            $pedido->productos()->attach($prod["id"], ["cantidad" => $prod["cantidad"]]);
+        }
+
+        $pedido->estado = 2;
+        $pedido->update();
+        
+        return response()->json(["mensaje" => "Pedido Registrado"], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(cr $cr)
+    public function show($id)
     {
         //
     }
@@ -52,10 +78,10 @@ class PedidoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(cr $cr)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +90,10 @@ class PedidoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, cr $cr)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +101,10 @@ class PedidoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(cr $cr)
+    public function destroy($id)
     {
         //
     }

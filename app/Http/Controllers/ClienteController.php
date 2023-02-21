@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cr;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
@@ -17,6 +17,27 @@ class ClienteController extends Controller
         //
     }
 
+    public function index_ajax(Request $request)
+    {
+        //if($request->ajax()){
+            $cliente = Cliente::orWhere('nombre_completo', 'like', "%$request->buscar%")
+                                ->orWhere('correo', 'like', "%$request->buscar%")
+                                ->firstOrFail();
+            return response()->json($cliente, 200);
+        //}
+    }
+
+    public function guardar_axios(Request $request)
+    {
+        $clie = new Cliente();
+        $clie->nombre_completo = $request->nombre_completo;
+        $clie->correo = $request->correo;
+        $clie->telefono = $request->telefono;
+        $clie->save();
+
+        return response()->json($clie, 201);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -24,7 +45,7 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.cliente.nuevo');
     }
 
     /**
@@ -35,16 +56,23 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cliente = new Cliente();
+    
+        $cliente->nombre_completo = $request->get('nombre_completo');
+        $cliente->ruc = $request->get('ruc');
+        $cliente->direccion = $request->get('direccion');
+        $cliente->telefono = $request->get('telefono');
+        $cliente->correo = $request->get('correo');
+        $cliente->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(cr $cr)
+    public function show($id)
     {
         //
     }
@@ -52,10 +80,10 @@ class ClienteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(cr $cr)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +92,10 @@ class ClienteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, cr $cr)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +103,10 @@ class ClienteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\cr  $cr
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(cr $cr)
+    public function destroy($id)
     {
         //
     }
